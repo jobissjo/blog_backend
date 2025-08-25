@@ -35,7 +35,7 @@ class AuthService:
             ValidationException: If user already exists
         """
         # Check if user exists (implement your DB logic here)
-        if await self._user_exists_by_email(user_data.email):
+        if await self.repository.get_by_email(user_data.email):
             raise AppException("User with this email already exists", status_code=400)
         
         # Hash password
