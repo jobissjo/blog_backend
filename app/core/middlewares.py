@@ -18,4 +18,4 @@ async def retrieve_user_handler(token: Token, _connection: ASGIConnection) -> Op
     except Exception as e:
         raise AppException(str(e), status_code=500)
     return None
-        
+            

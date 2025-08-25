@@ -1,6 +1,6 @@
 # app/domain/series/models.py
 from typing import Optional, List, TYPE_CHECKING
-from sqlalchemy import String, Text
+from sqlalchemy import Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 class Series(Base):
     __tablename__ = "series"
 
-    id: Mapped[str] = mapped_column(String, primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False, unique=True)
     description: Mapped[Optional[str]] = mapped_column(Text)
     thumbnail: Mapped[Optional[str]] = mapped_column(String)

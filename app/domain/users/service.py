@@ -13,7 +13,7 @@ class UserService:
         self.repo = repo
 
     async def register_user(self, user: User) -> User:
-        return await self.repo.add(user)
+        return await self.repo.add_user(user)
 
     async def get_user(self, user_id: str) -> User | None:
         return await self.repo.get_by_id(user_id)

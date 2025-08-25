@@ -47,9 +47,11 @@ class UserBase(msgspec.Struct):
 
 class UserCreate(UserBase):
     password: str
+    first_name: str = msgspec.field(name="firstName")
+    last_name: str = msgspec.field(name="lastName")
 
 class LoginSchema(msgspec.Struct):
-    username: str
+    email: str
     password: str
 
 class TokenResponse(msgspec.Struct):
@@ -70,3 +72,10 @@ class UserRead(msgspec.Struct):
 class ChangePasswordSchema(msgspec.Struct):
     old_password: str = msgspec.field(name="oldPassword")
     new_password: str = msgspec.field(name="newPassword")
+
+class ForgotEmailPwdSchema(msgspec.Struct):
+    email: str
+
+class VerifyEmailOtpSchema(msgspec.Struct):
+    email: str
+    otp: str

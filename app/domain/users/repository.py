@@ -1,7 +1,8 @@
 # app/domain/users/repository.py
+from datetime import datetime
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from .models import User, Profile, SocialMedia
+from .models import TempOtp, User, Profile, SocialMedia
 
 
 class UserRepository:
@@ -19,10 +20,25 @@ class UserRepository:
         result = await self.session.execute(select(User).where(User.username == username))
         return result.scalars().first()
 
-    async def add(self, user: User) -> User:
+    async def add_user(self, user: User) -> User:
         self.session.add(user)
         await self.session.commit()
         return user
+    
+    async def get_email_otp(self, email: str) -> TempOtp | None:
+        result = await self.session.execute(select(TempOtp).where(TempOtp.email == email))
+        return result.scalars().first()
+    
+    async def create_or_update_temp_otp(self, email: str, otp: str) -> None:
+        email_otp = await self.get_email_otp(email)
+        if email_otp:
+            email_otp.otp = otp
+            email_otp.generated_at = datetime.now()
+            await self.session.commit()
+        else:
+            temp_otp = TempOtp(email=email, otp=otp, generated_at=datetime.now())
+            self.session.add(temp_otp)
+            await self.session.commit()
 
 
 class SocialMediaRepository:
@@ -39,3 +55,5 @@ class SocialMediaRepository:
         self.session.add(sm)
         await self.session.commit()
         return sm
+
+    
