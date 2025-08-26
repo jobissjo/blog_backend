@@ -9,8 +9,9 @@ class UserRepository:
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    async def get_by_id(self, user_id: str) -> User | None:
-        return await self.session.get(User, user_id)
+    async def get_by_id(self, user_id: int) -> User | None:
+        result = await self.session.execute(select(User).where(User.id == user_id))
+        return result.scalars().first()
 
     async def get_by_email(self, email: str) -> User | None:
         result = await self.session.execute(select(User).where(User.email == email))
