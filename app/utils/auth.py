@@ -84,7 +84,7 @@ class JWTHandler:
         def _create_token_sync() -> str:
             expire = datetime.now(timezone.utc) + timedelta(hours=self.expiration_hours)
             payload = {
-                "user_id": user_id,
+                "sub": user_id,
                 "email": email,
                 "exp": expire,
                 "iat": datetime.now(timezone.utc),
@@ -114,7 +114,7 @@ class JWTHandler:
         def _create_refresh_token_sync() -> str:
             expire = datetime.now(timezone.utc) + timedelta(days=30)  # 30 days for refresh token
             payload = {
-                "user_id": user_id,
+                "sub": user_id,
                 "exp": expire,
                 "iat": datetime.now(timezone.utc),
                 "type": "refresh"

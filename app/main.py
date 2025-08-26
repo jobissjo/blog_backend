@@ -25,7 +25,8 @@ cors_config = CORSConfig(
         "http://localhost:5173",  # Vite dev server
         "http://127.0.0.1:3000",
         "https://yourdomain.com",  # Your production domain
-        "http://192.168.1.6:5173"
+        "http://192.168.1.6:5173",
+        "http://192.168.1.40:5173"
     ],
     
     # Or allow all origins (only for development)
