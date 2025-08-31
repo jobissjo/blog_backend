@@ -1,17 +1,23 @@
-import msgspec
 from datetime import datetime
+from pydantic import BaseModel
 
 
-class CommentBase(msgspec.Struct):
+class CommentBase(BaseModel):
     content: str
+
+    class Config:
+        from_attributes = True
 
 
 class CommentCreate(CommentBase):
     post_id: int
 
 
-class CommentUpdate(msgspec.Struct):
+class CommentUpdate(BaseModel):
     content: str
+
+    class Config:
+        from_attributes = True
 
 
 class CommentRead(CommentBase):
@@ -20,3 +26,6 @@ class CommentRead(CommentBase):
     post_id: int
     created_at: datetime
     updated_at: datetime | None = None
+
+    class Config:
+        from_attributes = True

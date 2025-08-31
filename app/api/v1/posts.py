@@ -3,6 +3,7 @@ from app.domain.posts.service import PostService
 from app.domain.posts.repository import PostRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.domain.posts.schema import BlogPostRead, BlogPostCreate
+from litestar.connection import Request
 
 
 class PostController(Controller):
@@ -15,9 +16,9 @@ class PostController(Controller):
         return await service.list_posts()
 
     @post("/")
-    async def create_post(self, data: BlogPostCreate, session: AsyncSession) -> BlogPostRead:
+    async def create_post(self, request: Request, data: BlogPostCreate, session: AsyncSession) -> BlogPostRead:
         service = PostService(PostRepository(session))
-        return await service.create_post(data)
+        return await service.create_post(data, request.user.id)
 
     @get("/{post_id:int}")
     async def get_post(self, post_id: int, session: AsyncSession) -> BlogPostRead:

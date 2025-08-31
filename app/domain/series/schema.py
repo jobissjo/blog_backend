@@ -1,10 +1,12 @@
-import msgspec
 from typing import Optional
+from pydantic import BaseModel
 
 
-class SeriesBase(msgspec.Struct):
+class SeriesBase(BaseModel):
     name: str
     
+    class Config:
+        from_attributes = True
 
 
 class SeriesCreate(SeriesBase):
@@ -16,3 +18,6 @@ class SeriesRead(SeriesBase):
     id: str
     description: Optional[str] = None
     thumbnail: Optional[str] = None
+
+    class Config:
+        from_attributes = True
