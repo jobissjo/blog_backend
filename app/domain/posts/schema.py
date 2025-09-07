@@ -1,6 +1,20 @@
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from dataclasses import dataclass, field
+from app.domain.posts.models import Tag
+from app.domain.users.schemas import UserBasicSchema
+from litestar.datastructures import UploadFile
+
+
+@dataclass
+class BlogPostCreateForm:
+    title: str
+    content: str
+    excerpt: str
+    image: Optional[UploadFile]  = None
+    series_id: Optional[int] = None
+    tags: Optional[List[str]] = field(default_factory=list)
 
 
 # Base schema for shared fields
@@ -22,21 +36,30 @@ class BlogPostUpdate(BaseModel):
     content: Optional[str] = None
     excerpt: Optional[str] = None
     image_url: Optional[str] = None
+    tags: Optional[List[int]] = None
 
     class Config:
         from_attributes = True
 
+class BlogTagRead(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        from_attributes = True
 
 # Schema for reading a blog post
 class BlogPostRead(BaseModel):
     id: int
     title: str
     content: str
+    created_at: datetime = Field(alias='createdAt', default=None)
     excerpt: str
-    created_at: datetime
-    updated_at: datetime
-    tags: Optional[List[str]] = []
+    updated_at: Optional[datetime] = Field(alias='updatedAt', default=None)
+    tags: Optional[List[BlogTagRead]]   
     image_url: Optional[str] = None
+    author_id: int
+    author: Optional[UserBasicSchema] = None
 
     class Config:
         from_attributes = True

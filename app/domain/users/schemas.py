@@ -104,3 +104,17 @@ class ForgotEmailPwdSchema(BaseModel):
 class VerifyEmailOtpSchema(BaseModel):
     email: str
     otp: str
+
+
+class UserBasicSchema(BaseModel):
+    id: int
+    username: str
+    email: str
+    role: str
+    first_name: str 
+    last_name: Optional[str]
+
+
+
+    class Config:
+        from_attributes = True

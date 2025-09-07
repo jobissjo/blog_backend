@@ -13,8 +13,8 @@ class SeriesBase(BaseModel):
 
 @dataclass
 class SeriesCreateForm:
-    name: str 
     description: str
+    name: str 
     thumbnail: Optional[UploadFile] = None
 
 class SeriesCreate(SeriesBase):

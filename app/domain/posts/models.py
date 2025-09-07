@@ -23,7 +23,7 @@ class Post(Base):
         DateTime(timezone=True), server_default=func.now()
     )
     updated_at: Mapped[Optional[DateTime]] = mapped_column(
-        DateTime(timezone=True), onupdate=func.now()
+        DateTime(timezone=True), onupdate=func.now(), server_default=func.now()
     )
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
