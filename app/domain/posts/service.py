@@ -9,9 +9,9 @@ class PostService:
     def __init__(self, repo: PostRepository):
         self.repo = repo
 
-    async def list_posts(self):
-        post_queryset = await self.repo.get_all()
-        return [BlogPostRead.model_validate(post) for post in post_queryset]
+    async def list_posts(self)-> list[BlogPostRead]:
+        return await self.repo.get_all()
+         
 
     async def get_post(self, post_id: int):
         result = await self.repo.get_by_id(post_id)

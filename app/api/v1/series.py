@@ -1,11 +1,16 @@
 # app/api/v1/series.py
+from typing import Annotated
 from litestar import Controller, get, post, delete, put
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.domain.series.models import Series
 from app.domain.series.repository import SeriesRepository
 from app.domain.series.service import SeriesService
-from app.domain.series.schema import SeriesCreate, SeriesRead
+from app.domain.series.schema import SeriesCreate, SeriesCreateForm, SeriesRead
+from litestar.dto import DataclassDTO
+from litestar.params import Body
+from litestar.enums import RequestEncodingType
 
+SeriesCreateFormDTO = DataclassDTO[SeriesCreateForm]
 
 class SeriesController(Controller):
     path = "api/v1/series"
@@ -24,7 +29,7 @@ class SeriesController(Controller):
         return await service.get_series(series_id)
 
     @post("/")
-    async def create_series(self, data: SeriesCreate, session: AsyncSession) -> SeriesRead:
+    async def create_series(self,  session: AsyncSession, data: Annotated[SeriesCreateForm, Body(media_type=RequestEncodingType.MULTI_PART)]) -> SeriesRead:
         repo = SeriesRepository(session)
         service = SeriesService(repo)
         return await service.create_series(data)
@@ -37,7 +42,7 @@ class SeriesController(Controller):
         await service.delete_series(series_id)
     
     @put("/{series_id:int}")
-    async def update_series(self, series_id: int, data: SeriesCreate, session: AsyncSession) -> SeriesRead:
+    async def update_series(self, series_id: int, data: Annotated[SeriesCreateForm, Body(media_type=RequestEncodingType.MULTI_PART)], session: AsyncSession) -> SeriesRead:
         repo = SeriesRepository(session)
         service = SeriesService(repo)
         series = await service.update_series(series_id, data)
