@@ -6,6 +6,7 @@ from app.db.base import Base
 
 if TYPE_CHECKING:
     from app.domain.comments.models import Comment
+    from app.domain.posts.models import Post
 
 
 
@@ -25,6 +26,7 @@ class User(Base):
         "Profile", back_populates="user", uselist=False, cascade="all, delete-orphan"
     )
     comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="user", cascade="all, delete-orphan")
+    posts: Mapped[List["Post"]] = relationship("Post", back_populates="author", cascade="all, delete-orphan")
 
 
 class Profile(Base):

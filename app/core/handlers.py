@@ -25,7 +25,7 @@ def http_exception_handler(_request: Request,exc: HTTPException) -> Response:
 
 
 def generic_exception_handler(_request: Request,exc: Exception) -> Response:
-    logger.error(f"{exc}")
+    logger.error(f"{exc}{exc.__class__.__name__}")
     return Response(
         {"error": "Internal Server Error"},
         status_code=HTTP_500_INTERNAL_SERVER_ERROR,

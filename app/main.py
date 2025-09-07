@@ -17,6 +17,7 @@ from litestar.exceptions import HTTPException
 from app.core.exceptions import AppException
 from app.core.security import jwt_auth, openapi_config
 from litestar.config.cors import CORSConfig
+from litestar.static_files import StaticFilesConfig
 
 cors_config = CORSConfig(
     # Allow specific origins (recommended for production)
@@ -26,7 +27,8 @@ cors_config = CORSConfig(
         "http://127.0.0.1:3000",
         "https://yourdomain.com",  # Your production domain
         "http://192.168.1.6:5173",
-        "http://192.168.1.40:5173"
+        "http://192.168.1.40:5173",
+        "http://192.168.1.2:5173"
     ],
     
     # Or allow all origins (only for development)
@@ -71,6 +73,12 @@ def create_app() -> Litestar:
         middleware=[jwt_auth.middleware],
         cors_config=cors_config,
         openapi_config=openapi_config,
+        static_files_config=[
+            StaticFilesConfig(
+                path='/media',
+                directories=['app/media']
+            )
+        ]
     )
 
 
