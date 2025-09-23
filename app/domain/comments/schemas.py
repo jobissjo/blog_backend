@@ -1,12 +1,11 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CommentBase(BaseModel):
     content: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CommentCreate(CommentBase):
@@ -16,8 +15,7 @@ class CommentCreate(CommentBase):
 class CommentUpdate(BaseModel):
     content: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CommentRead(CommentBase):
@@ -27,5 +25,4 @@ class CommentRead(CommentBase):
     created_at: datetime
     updated_at: datetime | None = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

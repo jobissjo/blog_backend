@@ -1,5 +1,5 @@
 # app/domain/users/schemas.py
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional, List
 
 
@@ -8,31 +8,27 @@ class SocialMediaBase(BaseModel):
     icon: Optional[str] = None
     base_url: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class SocialMediaRead(SocialMediaBase):
     id: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProfileSocialLinkBase(BaseModel):
     social_media_id: str
     url: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProfileSocialLinkRead(ProfileSocialLinkBase):
     id: str
     social_media: SocialMediaRead
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProfileBase(BaseModel):
@@ -40,8 +36,7 @@ class ProfileBase(BaseModel):
     bio: Optional[str] = None
     profession: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProfileRead(BaseModel):
@@ -51,16 +46,14 @@ class ProfileRead(BaseModel):
     bio: Optional[str] = None
     profession: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserBase(BaseModel):
     username: str
     email: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserCreate(UserBase):
@@ -88,8 +81,7 @@ class UserRead(BaseModel):
     role: str
     profile: Optional[ProfileRead] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ChangePasswordSchema(BaseModel):
@@ -116,5 +108,4 @@ class UserBasicSchema(BaseModel):
 
 
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

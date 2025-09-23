@@ -1,6 +1,6 @@
 from typing import List, Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from dataclasses import dataclass, field
 from app.domain.posts.models import Tag
 from app.domain.users.schemas import UserBasicSchema
@@ -38,15 +38,13 @@ class BlogPostUpdate(BaseModel):
     image_url: Optional[str] = None
     tags: Optional[List[int]] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 class BlogTagRead(BaseModel):
     id: int
     name: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 # Schema for reading a blog post
 class BlogPostRead(BaseModel):
@@ -61,5 +59,4 @@ class BlogPostRead(BaseModel):
     author_id: int
     author: Optional[UserBasicSchema] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
