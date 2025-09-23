@@ -7,14 +7,13 @@ from litestar.params import Body
 class SeriesBase(BaseModel):
     name: str
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 @dataclass
 class SeriesCreateForm:
-    name: str 
     description: str
+    name: str 
     thumbnail: Optional[UploadFile] = None
 
 class SeriesCreate(SeriesBase):
@@ -27,5 +26,4 @@ class SeriesRead(SeriesBase):
     description: Optional[str] = None
     thumbnail: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
