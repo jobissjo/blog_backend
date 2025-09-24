@@ -5,7 +5,7 @@ from sqlalchemy import select, update
 from app.core.exceptions import AppException
 from .models import Post, Tag
 from .schema import BlogPostUpdate, BlogPostCreate
-from sqlalchemy.orm import selectinload
+from sqlalchemy.orm import selectinload, joinedload
 
 
 class PostRepository:
@@ -13,19 +13,19 @@ class PostRepository:
         self.session = session
 
     async def get_all(self):
-        result = await self.session.execute(select(Post).options(selectinload(Post.tags)))
+        result = await self.session.execute(select(Post).options(selectinload(Post.tags),selectinload(Post.author)))
         return result.scalars().all()
     
     async def get_user_posts(self, user_id: int):
         result = await self.session.execute(
-            select(Post).where(Post.author_id == user_id).options(selectinload(Post.tags),selectinload(Post.author)  )
+            select(Post).where(Post.author_id == user_id).options(selectinload(Post.tags),selectinload(Post.author) )
         )
         return result.scalars().all()
 
     async def get_by_id(self, post_id: int) -> Post | None:
 
-        result = await self.session.execute(select(Post).where(Post.id == post_id).options(selectinload(Post.tags),selectinload(Post.author) ))
-        return result.scalar_one_or_none()
+        result = await self.session.execute(select(Post).where(Post.id == post_id).options(joinedload(Post.tags),joinedload(Post.author) ))
+        return result.unique().scalar_one_or_none()
 
     async def add(self, post: Post):
         print("In repo", post)

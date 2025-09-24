@@ -84,7 +84,7 @@ class AuthService:
             raise AppException("User with this email not exists", status_code=401)
         
         # Verify password
-        if not self.password_hasher.verify_password(login_data.password, user.password):
+        if not await self.password_hasher.verify_password(login_data.password, user.password):
             raise AppException("Invalid credentials", status_code=400)
         
         if not user.is_active:

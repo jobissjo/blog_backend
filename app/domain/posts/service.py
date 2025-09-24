@@ -29,7 +29,7 @@ class PostService:
         return BlogPostRead.model_validate(result)
 
     async def create_post(self, post: BlogPostCreateForm, user_id: int) -> BlogPostRead:
-        tag_instances = await self.repo.get_or_create_tags(post.tags)
+        # tag_instances = await self.repo.get_or_create_tags(post.tags)
         
 
         new_post = Post(
@@ -37,7 +37,7 @@ class PostService:
             content=post.content,
             excerpt=post.excerpt,
             author_id=user_id,
-            tags=tag_instances,
+            # tags=tag_instances,
             series_id=post.series_id
         )
         if post.image:
@@ -45,24 +45,11 @@ class PostService:
 
         result = await self.repo.add(new_post)
         print("In service", post)
-        tags_pydantic: list[BlogTagRead] = [
-            BlogTagRead.model_validate(tag) for tag in result.tags
-        ]
-        print('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-        post_read = BlogPostRead.model_validate(
-            {
-                "id": result.id,
-                "title": result.title,
-                "content": result.content,
-                "excerpt": result.excerpt,
-                "author_id": result.author_id,
-                "created_at": result.created_at,
-                "updated_at": result.updated_at,
-                "tags": tags_pydantic,
-            }
-        )
-
-        return post_read
+        # tags_pydantic: list[BlogTagRead] = [
+        #     BlogTagRead.model_validate(tag) for tag in result.tags
+        # ]
+       
+        return result
 
     async def delete_post(self, post_id: int):
         await self.repo.delete(post_id)
