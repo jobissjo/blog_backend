@@ -44,12 +44,8 @@ class PostService:
             new_post.image_url = FileUploadUtils.save_image(post.image)
 
         result = await self.repo.add(new_post)
-        print("In service", post)
-        # tags_pydantic: list[BlogTagRead] = [
-        #     BlogTagRead.model_validate(tag) for tag in result.tags
-        # ]
        
-        return result
+        return BlogPostRead.model_validate(result)  
 
     async def delete_post(self, post_id: int):
         await self.repo.delete(post_id)

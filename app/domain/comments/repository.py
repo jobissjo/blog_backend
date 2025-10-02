@@ -10,7 +10,7 @@ class CommentRepository:
     async def create(self, comment: Comment) -> Comment:
         self.session.add(comment)
         await self.session.commit()
-        await self.session.refresh(comment)
+        await self.session.refresh(comment, attribute_names=["user"])
         return comment
 
     async def get_by_id(self, comment_id: int) -> Comment | None:

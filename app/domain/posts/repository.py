@@ -6,6 +6,7 @@ from app.core.exceptions import AppException
 from .models import Post, Tag
 from .schema import BlogPostUpdate, BlogPostCreate
 from sqlalchemy.orm import selectinload, joinedload
+from app.domain.comments.models import Comment
 
 
 class PostRepository:
@@ -13,25 +14,25 @@ class PostRepository:
         self.session = session
 
     async def get_all(self):
-        result = await self.session.execute(select(Post).options(selectinload(Post.tags),selectinload(Post.author)))
+        result = await self.session.execute(select(Post).options(selectinload(Post.tags),selectinload(Post.author), selectinload(Post.comments)))
         return result.scalars().all()
     
     async def get_user_posts(self, user_id: int):
         result = await self.session.execute(
-            select(Post).where(Post.author_id == user_id).options(selectinload(Post.tags),selectinload(Post.author) )
+            select(Post).where(Post.author_id == user_id).options(selectinload(Post.tags),selectinload(Post.author), selectinload(Post.comments) )
         )
         return result.scalars().all()
 
     async def get_by_id(self, post_id: int) -> Post | None:
 
-        result = await self.session.execute(select(Post).where(Post.id == post_id).options(joinedload(Post.tags),joinedload(Post.author) ))
+        result = await self.session.execute(select(Post).where(Post.id == post_id).options(joinedload(Post.tags),joinedload(Post.author),joinedload(Post.comments).joinedload(Comment.user) ))
         return result.unique().scalar_one_or_none()
 
     async def add(self, post: Post):
         print("In repo", post)
         self.session.add(post)
         await self.session.commit()
-        await self.session.refresh(post, attribute_names=["tags"])
+        post = await self.get_by_id(post.id)
         return post
 
     async def update(self, post: Post, post_data: BlogPostUpdate):
