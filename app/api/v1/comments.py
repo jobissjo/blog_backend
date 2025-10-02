@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.domain.comments.repository import CommentRepository
 from app.domain.comments.service import CommentService
 from app.domain.comments.schemas import CommentRead, CommentCreate
+from litestar.connection import Request
 
 
 class CommentController(Controller):
@@ -14,14 +15,14 @@ class CommentController(Controller):
     async def create_comment(
         self,
         session: AsyncSession,
+        request: Request,
         data: CommentCreate = Body(),
     ) -> CommentRead:
         repo = CommentRepository(session)
         service = CommentService(repo)
         return await service.create_comment(
-            content=data["content"],
-            user_id=data["user_id"],
-            post_id=data["post_id"],
+            data=data,
+            user_id=request.user.id,
         )
 
     @get("/{comment_id:int}")

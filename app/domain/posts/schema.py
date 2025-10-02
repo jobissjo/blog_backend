@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from dataclasses import dataclass, field
 from app.domain.posts.models import Tag
 from app.domain.users.schemas import UserBasicSchema
+from app.domain.comments.schemas import CommentRead
 from litestar.datastructures import UploadFile
 
 
@@ -58,5 +59,8 @@ class BlogPostRead(BaseModel):
     image_url: Optional[str] = None
     author_id: int
     author: Optional[UserBasicSchema] = None
+    series_id: Optional[int] = None
+    # series: Optional[SeriesRead] = None
+    comments: Optional[List[CommentRead]] = None
 
     model_config = ConfigDict(from_attributes=True)

@@ -7,13 +7,14 @@ class CommentService:
     def __init__(self, repo: CommentRepository):
         self.repo = repo
 
-    async def create_comment(self, data: CommentCreate, user_id: int) -> Comment:
+    async def create_comment(self, data: CommentCreate, user_id: int) -> CommentRead:
         comment = Comment(
             content=data.content,
             user_id=user_id,
             post_id=data.post_id
         )
-        return await self.repo.create(comment)
+        comment_response = await self.repo.create(comment)
+        return CommentRead.model_validate(comment_response)
 
     async def get_comment(self, comment_id: int) -> Comment | None:
         return await self.repo.get_by_id(comment_id)
