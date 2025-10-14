@@ -54,7 +54,7 @@ cors_config = CORSConfig(
 )
 
 @get("/")
-def home() -> dict[str, str]:
+async def home() -> dict[str, str]:
     return {"message": "Hello, Litestar!"}
 
 def create_app() -> Litestar:
