@@ -1,5 +1,5 @@
 # app/main.py
-from litestar import Litestar
+from litestar import Litestar, get
 from app.api.v1 import (
     PostController,
     SeriesController,
@@ -53,10 +53,14 @@ cors_config = CORSConfig(
     max_age=600,  # Preflight cache time in seconds
 )
 
+@get("/")
+async def home() -> dict[str, str]:
+    return {"message": "Hello, Litestar!"}
 
 def create_app() -> Litestar:
     return Litestar(
         route_handlers=[
+            home,
             PostController,
             SeriesController,
             UserController,
@@ -80,6 +84,7 @@ def create_app() -> Litestar:
             )
         ]
     )
+
 
 
 app = create_app()
